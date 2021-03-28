@@ -32,9 +32,16 @@ def get_devices():
     res_dic = r.json()
     return res_dic
 
+def get_device_status(deviceId):
+    api_url = "/v1.0/devices/" + deviceId + "/status"
+    url = base_url + api_url
+    r = requests.get(url, headers=headers)
+    res_dic = r.json()
+    return res_dic
+
+
 def main():
     res_dic = get_devices()
-    pprint.pprint(res_dic, indent=4)
     save_json(res_dic, "devicelist.json")
     print("完了")
 
