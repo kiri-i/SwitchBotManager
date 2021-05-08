@@ -6,6 +6,7 @@ import requests
 import pprint
 import pathlib
 import json
+import fire
 
 # .envを読み込んで環境変数を設定
 load_dotenv()
@@ -39,6 +40,24 @@ def get_device_status(deviceId):
     res_dic = r.json()
     return res_dic
 
+def slide_curtain(deviceId, position):
+    api_url = "/v1.0/devices/" + deviceId + "/commands"
+    url = base_url + api_url
+    command_json = {
+        "command": "setPosition",
+        "parameter": position,
+    }
+    r = requests.post(url, headers=headers, json = command_json)
+    res_dic = r.json()
+    pprint.pprint(res_dic)
+    return res_dic
+
+def open():
+    slide_curtain("FA0F7B13E9A4", "0,ff,0")
+
+def close():
+    slide_curtain("FA0F7B13E9A4", "0,ff,100")
+
 
 def main():
     res_dic = get_devices()
@@ -46,4 +65,7 @@ def main():
     print("完了")
 
 if __name__ == "__main__":
-    main()
+    fire.Fire({
+        "open" : open,
+        "close": close
+    })
